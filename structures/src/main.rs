@@ -23,6 +23,12 @@ impl Queue {
     pub fn is_empty(&self) -> bool {
         self.older.is_empty() && self.younger.is_empty()
     }
+
+    pub fn split(self) -> (Vec<char>, Vec<char>) {
+        // Método que toma propiedad de self, desinicializando las propiedades
+        // older y younger al retornarlas.
+        (self.older, self.younger)
+    }
 }
 
 fn main() {
@@ -50,5 +56,21 @@ fn main() {
     q.push('9');
     assert!(!q.is_empty());
 
+    let mut q = Queue {
+        older: Vec::new(),
+        younger: Vec::new(),
+    };
+    q.push('P');
+    q.push('D');
+    assert_eq!(q.pop(), Some('P'));
+    q.push('X');
+
+    let (older, younger) = q.split();
+    assert_eq!(older, vec!['D']);
+    assert_eq!(younger, vec!['X']);
+
+    // Ejecutar assert!(q.is_empty());
+    // fallara, ya que self.older y self.younger
+    // pasaron a ser propiedad de older y younger.
     println!("Finalización exitosa");
 }
