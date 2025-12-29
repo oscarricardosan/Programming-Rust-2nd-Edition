@@ -19,6 +19,10 @@ impl Queue {
         }
         self.older.pop()
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.older.is_empty() && self.younger.is_empty()
+    }
 }
 
 fn main() {
@@ -41,6 +45,10 @@ fn main() {
 
     //Lee la cola de older, esta vacía al igual que younger, retorna None
     assert_eq!(q.pop(), None);
+
+    assert!(q.is_empty());
+    q.push('9');
+    assert!(!q.is_empty());
 
     println!("Finalización exitosa");
 }
