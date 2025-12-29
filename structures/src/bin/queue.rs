@@ -29,6 +29,13 @@ impl Queue {
         // older y younger al retornarlas.
         (self.older, self.younger)
     }
+
+    pub fn new() -> Queue {
+        Queue {
+            older: Vec::new(),
+            younger: Vec::new(),
+        }
+    }
 }
 
 fn main() {
@@ -72,5 +79,11 @@ fn main() {
     // Ejecutar assert!(q.is_empty());
     // fallara, ya que self.older y self.younger
     // pasaron a ser propiedad de older y younger.
+
+    //Ejemplo de Queue como puntero Box, no hay que modificar el código
+    // de la estructura, rust toma automaticamente la referencia
+    let mut bq = Box::new(Queue::new());
+    bq.push('6');
+
     println!("Finalización exitosa");
 }
