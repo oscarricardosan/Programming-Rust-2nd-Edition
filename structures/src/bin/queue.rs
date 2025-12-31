@@ -1,14 +1,14 @@
-pub struct Queue {
-    older: Vec<char>,
-    younger: Vec<char>,
+pub struct Queue<T> {
+    older: Vec<T>,
+    younger: Vec<T>,
 }
 
-impl Queue {
-    pub fn push(&mut self, c: char) {
-        self.younger.push(c);
+impl<T> Queue<T> {
+    pub fn push(&mut self, t: T) {
+        self.younger.push(t);
     }
 
-    pub fn pop(&mut self) -> Option<char> {
+    pub fn pop(&mut self) -> Option<T> {
         if self.older.is_empty() {
             if self.younger.is_empty() {
                 return None;
@@ -24,13 +24,13 @@ impl Queue {
         self.older.is_empty() && self.younger.is_empty()
     }
 
-    pub fn split(self) -> (Vec<char>, Vec<char>) {
+    pub fn split(self) -> (Vec<T>, Vec<T>) {
         // Método que toma propiedad de self, desinicializando las propiedades
         // older y younger al retornarlas.
         (self.older, self.younger)
     }
 
-    pub fn new() -> Queue {
+    pub fn new() -> Self {
         Queue {
             older: Vec::new(),
             younger: Vec::new(),
@@ -84,6 +84,11 @@ fn main() {
     // de la estructura, rust toma automaticamente la referencia
     let mut bq = Box::new(Queue::new());
     bq.push('6');
+
+    // Queue de números
+    let mut bi = Queue::new();
+    bi.push(1);
+    assert_eq!(bi.pop(), Some(1));
 
     println!("Finalización exitosa");
 }
