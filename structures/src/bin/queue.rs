@@ -82,11 +82,11 @@ fn main() {
 
     //Ejemplo de Queue como puntero Box, no hay que modificar el código
     // de la estructura, rust toma automaticamente la referencia
-    let mut bq = Box::new(Queue::new());
+    let mut bq = Box::new(Queue::<char>::new());
     bq.push('6');
 
     // Queue de números
-    let mut bi = Queue::new();
+    let mut bi = Queue::<u8>::new(); // Queue::new()
     bi.push(1);
     assert_eq!(bi.pop(), Some(1));
 
