@@ -8,7 +8,7 @@ enum TimeUnit {
 
 #[allow(dead_code)]
 impl TimeUnit {
-    fn plural(self) -> &'static str {
+    fn plural(&self) -> &'static str {
         match self {
             TimeUnit::Days => "days",
             TimeUnit::Months => "months",
@@ -16,7 +16,7 @@ impl TimeUnit {
         }
     }
 
-    fn singular(self) -> &'static str {
+    fn singular(&self) -> &'static str {
         self.plural().trim_end_matches('s')
     }
 }
@@ -72,5 +72,39 @@ fn main() {
     };
 
     dbg!(center);
+    println!("");
+
+    println!(
+        " * {}",
+        rought_time_to_english(&RoughtTime::InTheFuture(TimeUnit::Years, 1))
+    );
+    println!(
+        " * {}",
+        rought_time_to_english(&RoughtTime::InTheFuture(TimeUnit::Years, 3))
+    );
+    println!(" * {}", rought_time_to_english(&RoughtTime::JustNow));
+    println!(
+        " * {}",
+        rought_time_to_english(&RoughtTime::InThePast(TimeUnit::Years, 3))
+    );
+    println!(
+        " * {}",
+        rought_time_to_english(&RoughtTime::InThePast(TimeUnit::Years, 1))
+    );
+    println!("");
+
     println!("✅ Finalizado!");
+}
+
+// Ejemplo de patron de coincidencia para extraer un valor de una enumeración
+fn rought_time_to_english(rt: &RoughtTime) -> String {
+    match rt {
+        RoughtTime::InThePast(ref units, 1) => format!("a {} ago", units.singular()),
+        RoughtTime::InThePast(ref units, ref count) => format!("{} {} ago", count, units.plural()),
+        RoughtTime::JustNow => format!("juts now"),
+        RoughtTime::InTheFuture(ref units, 1) => format!("a {} from now", units.singular()),
+        RoughtTime::InTheFuture(ref units, ref count) => {
+            format!("{} {} from now", count, units.plural())
+        }
+    }
 }
