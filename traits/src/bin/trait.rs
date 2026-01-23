@@ -16,10 +16,18 @@ fn main() -> std::io::Result<()> {
     let mut buf: Vec<u8> = vec![];
     buf.write_all(b"hello")?;
 
+
+    let mut bytes= vec![];
+    say_hello_generic_fun(&mut bytes)?;
     Ok(())
 }
 
 fn say_hello(out: &mut dyn Write) -> std::io::Result<()> {
+    out.write_all(b"hello world\n")?;
+    out.flush()
+}
+
+fn say_hello_generic_fun<W: Write>(out: &mut W) -> std::io::Result<()> {
     out.write_all(b"hello world\n")?;
     out.flush()
 }
