@@ -55,3 +55,4 @@ fn show_it(thing: &str) {
 fn show_it_generic<T: Display + ?Sized>(thing: &T) {
     println!(" == {}", thing);
 }
+
