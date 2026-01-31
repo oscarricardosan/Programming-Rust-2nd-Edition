@@ -13,27 +13,21 @@ struct Response{
     body: Vec<u8>
 }
 
-type BoxedCallback= Box<dyn Fn(&Request) -> Response>;
-struct BasicRouter{
-    routes: HashMap<String, BoxedCallback>
+struct FnPointerRouter {
+    routes: HashMap<String, fn(&Request) -> Response>
 }
 
-impl BasicRouter{
+impl FnPointerRouter{
 
     //Crea un enrutador vácio 
-    fn new()-> BasicRouter{
-        BasicRouter{routes: HashMap::new()}
+    fn new()-> FnPointerRouter{
+        FnPointerRouter{routes: HashMap::new()}
     }
 
-    fn add_route<C>(&mut self, url: &str, callback: C)
-        where C: Fn(&Request) -> Response + 'static
+    fn add_route(&mut self, url: &str, callback: fn(&Request) -> Response)
     {
-        self.routes.insert(url.to_string(), Box::new(callback));
+        self.routes.insert(url.to_string(), callback);
     }
-
-}
-
-impl BasicRouter {
 
     fn handle_request(&self, request: &Request) -> Response{
         match self.routes.get(&request.url) {
@@ -46,12 +40,41 @@ impl BasicRouter {
 
 fn main() {
 
-    let mut router= BasicRouter::new();
+    let mut router= FnPointerRouter::new();
     router.add_route("/", |_|get_form_response());
+    
+    router.handle_request(&Request { 
+        method: String::from("post"), 
+        url: "test".to_string(), 
+        headers: HashMap::new(), 
+        body: "{}".into()
+    });
+    
+    router.handle_request(&Request { 
+        method: String::from("post"), 
+        url: "/".to_string(), 
+        headers: HashMap::new(), 
+        body: "{}".into()
+    });
 
     println!("✅ Finalizado!");
 }
 
-fn get_form_response(){
-    println!("Ok");
+fn get_form_response() -> Response{
+    println!(" --> OK");
+    Response{
+        code: 200,
+        headers: HashMap::new(),
+        body: "ok".into()
+    }
+}
+
+
+fn not_found_response() -> Response{
+    println!(" --> No encontrado");
+    Response{
+        code: 404,
+        headers: HashMap::new(),
+        body: "No encontrado".into()
+    }
 }
