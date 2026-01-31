@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "enums"
+name = "closures"
 version = "0.1.0"
