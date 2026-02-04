@@ -1,5 +1,6 @@
 
 use std::{collections::{BTreeMap, HashMap}, str::FromStr, vec};
+
 fn main() {
     
     let text= "    ponies   \n      giraffes\niguanas\nsquid".to_string();
@@ -83,6 +84,5 @@ When will you stop wasting time plotting fractals?\r";
     for body in message.lines().skip_while(|l|!l.is_empty()){
         println!("{}", body);
     }
-    println!("✅ Finalizado!");
 
 }
