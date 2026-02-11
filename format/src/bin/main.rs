@@ -1,9 +1,14 @@
 use std::{fs::OpenOptions, io::Write};
 
+macro_rules! log {
+    ($format:tt, $($arg:expr), *) => (
+        write_log_entry(format_args!($format, $($arg), *))
+    )
+}
+
 fn main() {
-    write_log_entry(
-        format_args!("Hark! {:#?}\n", "Oscar")
-    );
+    
+    log!("Hark! {:#?}\n", 2);
 
     println!("✅ Finalizado!");
 }
