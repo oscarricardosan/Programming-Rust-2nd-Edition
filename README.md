@@ -8,7 +8,7 @@ Ya que algunos ejemplos de cóigo del curso no son compatibles con versiones act
 # Ejecución de contenedor
 
 ```
-docker run -it -v .:/app -w /app rust /bin/bash
+docker run --network host -it -v .:/app -w /app rust /bin/bash
 cd closures
 cargo run --bin trait
 ```
