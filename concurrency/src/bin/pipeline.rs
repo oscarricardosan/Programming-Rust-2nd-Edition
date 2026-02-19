@@ -20,24 +20,23 @@ fn main(){
 
 
     let (sender_move_files, handle_move_files)= move_file();
-    let (sender_error, handle_errors)= process_errors();
     let (sender_successful, handle_successful)= process_successful(sender_move_files.clone());
+    let (sender_error, handle_errors)= process_errors();
     let (receiver_indexed_file, handle_file_indexer)= index_files(documents);
     let handle_check_files= check_files(receiver_indexed_file, sender_error.clone(), sender_successful.clone());
 
 
     handle_file_indexer.join().unwrap().unwrap();
     handle_check_files.join().unwrap();
-    
+
     drop(sender_error);
     drop(sender_successful);
     drop(sender_move_files);    
 
-
-    let documents= handle_move_files.join().unwrap();
-
     handle_errors.join().unwrap();
     handle_successful.join().unwrap();
+    let documents= handle_move_files.join().unwrap();
+
 
     println!("Archivos Procesados: ");
     
@@ -123,7 +122,7 @@ fn process_errors()-> (mpsc::Sender<Error>, thread::JoinHandle<()>)
     (sender, handler)
 }
 
-fn process_successful(handle_file: mpsc::Sender<Document>)-> (mpsc::Sender<Document>, thread::JoinHandle<()>)
+fn process_successful(handle_file: mpsc::SyncSender<Document>)-> (mpsc::Sender<Document>, thread::JoinHandle<()>)
 {
     let (
         sender, 
@@ -154,12 +153,12 @@ fn process_successful(handle_file: mpsc::Sender<Document>)-> (mpsc::Sender<Docum
 }
 
 
-fn move_file()-> (mpsc::Sender<Document>, thread::JoinHandle<Vec<Document>>)
+fn move_file()-> (mpsc::SyncSender<Document>, thread::JoinHandle<Vec<Document>>)
 {
     let (
         sender, 
         receiver
-    ): (mpsc::Sender<Document>, mpsc::Receiver<Document>) = mpsc::channel();
+    ): (mpsc::SyncSender<Document>, mpsc::Receiver<Document>) = mpsc::sync_channel(100);
 
     if let Err(e) = fs::remove_dir_all("documents_processed") {
         if e.kind() != io::ErrorKind::NotFound {
