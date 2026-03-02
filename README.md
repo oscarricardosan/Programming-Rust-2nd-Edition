@@ -12,3 +12,10 @@ docker run --network host -it -v .:/app -w /app rust /bin/bash
 cd closures
 cargo run --bin trait
 ```
+
+# Conclusión
+
+Leí completos los capitulos 22 y 23, pero no hice código sobre ello ya que son caracteristicas muy avanzadas que de momento no pienso usar.
+
+El csaber que existen esos temas y como se usan es valioso por lo cual los termine, pero, no gaste tiempo en iniciarlo ya que es momento de iniciar
+a poner en practica lo aprendido en un nuevo proyecto.
